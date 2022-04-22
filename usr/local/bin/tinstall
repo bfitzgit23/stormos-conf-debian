@@ -1,0 +1,2 @@
+#!/bin/bash
+sudo gdebi teamviewer --noconfirm; gnome-terminal -e "teamviewer --daemon start"
