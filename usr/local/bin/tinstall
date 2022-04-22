@@ -1,2 +1,2 @@
 #!/bin/bash
-sudo gdebi teamviewer --noconfirm; gnome-terminal -e "teamviewer --daemon start"
+wget https://download.teamviewer.com/download/linux/teamviewer_amd64.deb; sudo apt install -y ./teamviewer_amd64.deb; gnome-terminal -e "teamviewer --daemon start"
