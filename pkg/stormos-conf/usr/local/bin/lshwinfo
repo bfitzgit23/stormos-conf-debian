@@ -1,0 +1,3 @@
+#!/bin/bash
+sudo lshw -short > ~/Documents/info.txt; thunar ~/Documents/ 
+#&& kill -9 $PPID
