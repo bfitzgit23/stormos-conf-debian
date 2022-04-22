@@ -47,7 +47,7 @@ yad --plug="$id" --tabnum=5 --columns=2 --form \
 --field="<b>Patreon Page</b>":fbtn "xdg-open https://patreon.com/benfitzpatrick" &> /tmp/data5 &
 
 
-yad --notebook --key="$id" --center --tab-pos=top  --width=480 --height=175 --tab="<b>(1).Welcome</b>" --tab="<b>(2).Maintenance/Updates/Support</b>" --tab="<b>(3).Game/Utilities Installs</b>" --tab="<b>(4).Cups/Printer Drivers</b>"  --tab="<b>(5).Donations/Merchandise</b>"  --image=/usr/share/icons/scalable/apps/stormos.png \
+yad --notebook --key="$id" --center --tab-pos=top  --width=480 --height=175 --tab="<b>(1).Welcome</b>" --tab="<b>(2).Maintenance/Updates/Support</b>" --tab="<b>(3).Game/Utilities Installs</b>" --tab="<b>(4).Cups/Printer Drivers</b>"  --tab="<b>(5).Donations/Merchandise</b>"  --image=/usr/share/icons/scalable/apps/ubuntu-logo.png \
 --title="Storm OS Maintenance and Utilities Program v2.0.0.15" \
 --text="<b>Greetings $USER Use this Utility tool to Maintain and Upgrade your Storm OS</b>" \
 --justify=center \
@@ -61,7 +61,7 @@ yad --notebook --key="$id" --center --tab-pos=top  --width=480 --height=175 --ta
 
 
 
-#StormOS." --image=/usr/share/icons/scalable/apps/stormos.png"  \
+#StormOS." --image=/usr/share/icons/scalable/apps/ubuntu-logo.png"  \
 
 case $? in
     0)
