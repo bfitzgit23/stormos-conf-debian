@@ -1,8 +1,0 @@
-Package: stormos-conf
-Version: 0.1.0-1
-Description: StormOS Configuration Tool
-Architecture: amd64
-License: GPL3
-Maintainer: DarkXero <info@techxero.com>
-Homepage: https://github.com/bfitzgit23
-Provides: stormos-conf

@@ -1,5 +1,5 @@
 # Maintainer: DarkXero <info@techxero.com>
-pkgname=stormos-conf
+pkgname=stormos-conf-ubuntu
 _destname1="/"
 pkgver=0.1.0
 pkgrel=1
