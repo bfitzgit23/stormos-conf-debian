@@ -24,11 +24,10 @@ yad --plug="$id" --tabnum=2 --columns=2 --form \
 
 
 yad --plug="$id" --tabnum=3 --columns=2 --form \
---field="<b>Install Steam Native</b>":fbtn "gnome-terminal -e 'sudo dpkg --add-architecure i386'" \
+--field="<b>32bit Dependencies</b>":fbtn "gnome-terminal -e 'sudo dpkg --add-architecure i386'" \
 --field="<b>Install Steam Native</b>":fbtn "gnome-terminal -e 'sudo apt install -y steam:i386 gamemode gamemode:i386'" \
 --field="<b>Install Heroic Launcher</b>":fbtn "gnome-terminal -e 'sudo apt install -y heroic-games-launcher-bin gamemode'" \
 --field="<b>Install Lutris Launcher</b>":fbtn "gnome-terminal -e 'sudo apt install -y lutris gamemode'" \
---field="<b>Install Bottles Launcher</b>":fbtn "gnome-terminal -e 'sudo gdebi bottles'" \
 --field="<b>Install Lshw</b>":FBTN "gnome-terminal -e  'sudo apt install -y lshw'" \
 --field="Reserved:BTN" "eom" &> /tmp/data3 &
 
