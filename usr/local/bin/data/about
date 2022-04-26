@@ -5,7 +5,7 @@
 
 ## About XeroLinux
 
-yad --title "Welcome To StormOS" --image='/usr/share/icons/scalable/apps/stormos-logo.png'  \
+yad --title "Welcome To StormOS" --image='/usr/share/icons/scalable/apps/debian-logo.png'  \
 	--about \
 	--pname='StormOS' \
 	--image='debian' \
