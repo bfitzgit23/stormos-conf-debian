@@ -1,78 +1,176 @@
-#!/bin/bash
-# Written By Seeker for StormFish OS/Storm OS
-# Forked and Inspired by Xerolinux-Tool
+#!/usr/bin/env python3
 
-id=$(echo $[($RANDOM % ($[10000 - 32000] + 1)) + 10000] )
-echo "$id"
+import os
+import gi
 
-yad --plug="$id" --tabnum=1 --columns=2 --form \
---field="<b>Visit The debian Site (Soon to Change Hosts)</b>":fbtn "xdg-open https://storm-os.godaddysites.com" \
---field="<b>Visit The debian Sourceforge Site for Direct Downloads and Info on debian</b>":fbtn "xdg-open https://sourceforge.net/projects/hackman-linux/files/" \
---field="<b>Or Visit The StormFish OS Site</b>":fbtn "xdg-open https://sourceforge.net/projects/stormfish-os/" \
---field="<b>debian ReadMe</b>":fbtn '/usr/local/bin/data/about' \
---field="<b>Step 1. Visit us and Join The debian/StormFishOS Discord Channel</b>":fbtn "xdg-open https://discord.gg/36JkjDVUP9" \
---field="Reserved:BTN" "eom" &> /tmp/data1 &
+# Ensure GTK 3 is used by setting the GI_TYPELIB_PATH to the correct location
+os.environ['GI_TYPELIB_PATH'] = '/usr/lib/girepository-1.0'
 
-yad --plug="$id" --tabnum=2 --columns=2 --form \
---field="<b>Step 1. System Updates</b>":FBTN "xfce4-terminal -e 'sudo apt update -y'" \
---field="<b>Step 2. Install Teamviewer</b>":FBTN "xfce4-terminal -e 'tinstall'" \
---field="<b>Step 3. Lshw for System Info to Txt</b>":FBTN "xfce4-terminal -e 'lshwinfo'" \
---field="<b>Step 4. Installation of Nvidia-Detect after that reboot</b>":FBTN "xfce4-terminal -e  'sudo apt install -y nvidia-detect'" \
---field="<b>Step 5. (Optional) Blank your Screen/s select here </b>":FBTN "xfce4-terminal -e 'blankscreen'" \
---field="Reserved:BTN" "eom" &> /tmp/data2 &
+gi.require_version('Gtk', '3.0')
+from gi.repository import Gtk
 
+import subprocess
 
+class MainWindow(Gtk.Window):
+    def __init__(self):
+        Gtk.Window.__init__(self, title="StormD Utilities Program v5.0.0.2")
+        self.set_border_width(10)
+        self.set_default_size(600, 400)
 
-yad --plug="$id" --tabnum=3 --columns=2 --form \
---field="<b>32bit Dependencies</b>":fbtn "xfce4-terminal -e 'sudo dpkg --add-architecure i386'" \
---field="<b>Install Steam Native</b>":fbtn "xfce4-terminal -e 'sudo apt install -y steam:i386 gamemode gamemode:i386'" \
---field="<b>Install Heroic Launcher</b>":fbtn "xfce4-terminal -e 'sudo apt install -y heroic-games-launcher-bin gamemode'" \
---field="<b>Install Lutris Launcher</b>":fbtn "xfce4-terminal -e 'sudo apt install -y lutris gamemode'" \
---field="<b>Install Lshw</b>":FBTN "xfce4-terminal -e  'sudo apt install -y lshw'" \
---field="Reserved:BTN" "eom" &> /tmp/data3 &
+        hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
+        self.add(hbox)
 
+        notebook_vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
+        hbox.pack_start(notebook_vbox, True, True, 0)
 
+        notebook = Gtk.Notebook()
+        notebook.set_tab_pos(Gtk.PositionType.LEFT)
+        notebook_vbox.pack_start(notebook, True, True, 0)
 
-yad --plug="$id" --tabnum=4 --columns=2 --form \
---field="<b>Step 1.Enable Cups/Printer</b>":fbtn "xfce4-terminal -e 'systemctl enable --now cups'" \
---field="<b>Step 2. Cups/Printer Web Interface</b>":fbtn "xdg-open http://127.0.0.1:631" \
---field="<b>Epson Drivers</b>":fbtn "xfce4-terminal -e 'epsoninstaller'" \
---field="Reserved":btn "eom" &> /tmp/data4 &
+        self.create_maintenance_tab(notebook)
+        self.create_game_utilities_tab(notebook)
+        self.create_printer_tab(notebook)
+        self.create_arch_university_tab(notebook)
+        self.create_about_us_tab(notebook)
 
+    def create_button_with_icon(self, label, command, icon_name):
+        button = Gtk.Button()
+        box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
+        image = Gtk.Image.new_from_icon_name(icon_name, Gtk.IconSize.BUTTON)
+        label_widget = Gtk.Label(label=label)
+        box.pack_start(image, False, False, 5)
+        box.pack_start(label_widget, False, False, 5)
+        button.add(box)
+        button.connect("clicked", self.run_command, command)
+        return button
 
-yad --plug="$id" --tabnum=5 --columns=2 --form \
---field="<b>Distrowatch</b>":fbtn "xdg-open https://distrowatch.com" \
---field="<b>Merchandise Store</b>":fbtn "xdg-open https://ebuzz-central.creator-spring.com/" \
---field="<b>Gofund.me Page</b>":fbtn "xdg-open https://gofund.me/d954872d" \
---field="<b>Patreon Page</b>":fbtn "xdg-open https://patreon.com/benfitzpatrick" &> /tmp/data5 &
+    def run_command(self, widget, command):
+        subprocess.Popen(command, shell=True)
 
+    def create_maintenance_tab(self, notebook):
+        grid = Gtk.Grid()
+        grid.set_column_homogeneous(True)
+        grid.set_row_homogeneous(True)
 
-yad --notebook --key="$id" --center --tab-pos=top  --width=480 --height=175 --tab="<b>(1).Welcome</b>" --tab="<b>(2).Maintenance/Updates/Support</b>" --tab="<b>(3).Game/Utilities Installs</b>" --tab="<b>(4).Cups/Printer Drivers</b>"  --tab="<b>(5).Donations/Merchandise</b>"  --image=/usr/share/icons/scalable/apps/debian-logo.png \
---title="Storm OS Maintenance and Utilities Program v2.0.0.15" \
---text="<b>Greetings $USER Use this Utility tool to Maintain and Upgrade your Storm OS</b>" \
---justify=center \
---button="Logout":"xfce4-session-logout" \
---button="System Info Lshw":"xfce4-terminal -H -x sudo lshw -short" \
---button="System Resources":"xfce4-terminal -H -x top" \
---button="Update Maintenance Program":"xfce4-terminal -e 'utilityup'" \
---button="Launch Terminal":"xfce4-terminal" \
---button="Launch Browser":"firefox" \
---button="Exit" \
+        commands = [
+            ("Step 1. Refresh Mirrors", "xfce4-terminal -e 'sudo apt update", "view-refresh"),
+            ("Step 2. System Updates", "xfce4-terminal -e 'sudo apt full-upgrade -y'", "system-software-update"),
+            ("Step 3. Install Teamviewer", "xfce4-terminal -e 'tinstall'", "applications-internet"),
+            ("Step 4. Install Lshw", "xfce4-terminal -e 'sudo apt install -y lshw'", "applications-system"),
+            ("Step 5. Install i2c-tools for decode-dimms", "xfce4-terminal -e 'sudo apt install -y i2c-tools'", "applications-system"),
+            ("Step 6. Install Nvidia drivers, after that, (Reboot)", "xfce4-terminal -e 'sudo apt install -y nvidia-detect nvidia-driver'", "video-display"),
+        ]
 
+        for i, (label, command, icon_name) in enumerate(commands):
+            button = self.create_button_with_icon(label, command, icon_name)
+            grid.attach(button, 0, i, 1, 1)
 
+        label = Gtk.Label(label="<b>Maintenance/Updates/Support</b>", use_markup=True)
+        notebook.append_page(grid, label)
 
-#debian." --image=/usr/share/icons/scalable/apps/debian-logo.png"  \
+    def create_game_utilities_tab(self, notebook):
+        grid = Gtk.Grid()
+        grid.set_column_homogeneous(True)
+        grid.set_row_homogeneous(True)
 
-case $? in
-    0)
-    exit;;
-    1)
-    exit;;
-    70)
-    exit;;
-    252)
-    exit;;
-esac
+        commands = [
+            ("Install Steam Native", "xfce4-terminal -e 'sudo apt install -y steam gamemode'", "applications-games"),
+            ("Install Lutris Launcher", "xfce4-terminal -e 'sudo apt install -y lutris gamemode'", "applications-games"),
+            ("Install Mangohud/Goverlay", "xfce4-terminal -e 'apt install -y --noconfirm mangohud'", "applications-games"),
+            ("Install Gnome-Calculator", "xfce4-terminal -e 'sudo apt install -y gnome-calculator'", "accessories-calculator"),
+            ("Install Flameshot", "xfce4-terminal -e 'sudo apt install -y flameshot'", "accessories-screenshot"),
+            ("Install Transmission-Gtk", "xfce4-terminal -e 'sudo apt install -y transmission'", "network-workgroup"),
+            ("Install Thunderbird", "xfce4-terminal -e 'sudo apt install -y thunderbird'", "internet-mail"),
+            ("Install Xed (Alt) Text Editor", "xfce4-terminal -e 'sudo apt install -y xed'", "accessories-text-editor"),
+            ("Install Media Stream Installer", "xfce4-terminal -e 'minstaller'", "multimedia-video-player"),
+            ("Install Minimize to Tray (Auto Reboot)", "xfce4-terminal -e 'trayinjector'", "system-run")
+        ]
 
+        for i, (label, command, icon_name) in enumerate(commands):
+            button = self.create_button_with_icon(label, command, icon_name)
+            grid.attach(button, 0, i, 1, 1)
 
-#debian." --image=/usr/share/icons/scalable/apps/debian.png  \
+        label = Gtk.Label(label="<b>Game/Utilities/Scripts</b>", use_markup=True)
+        notebook.append_page(grid, label)
+
+    def create_printer_tab(self, notebook):
+        grid = Gtk.Grid()
+        grid.set_column_homogeneous(True)
+        grid.set_row_homogeneous(True)
+
+        commands = [
+            ("Enable Cups/Printer", "xfce4-terminal -e 'systemctl enable --now cups'", "printer"),
+            ("Cups/Printer Web Interface", "xdg-open http://127.0.0.1:631", "applications-internet"),
+            ("(Optional) Epson Drivers", "xfce4-terminal -e 'epsoninstaller'", "printer"),
+            ("HP Drivers (Preinstalled)", "eom", "printer")
+        ]
+
+        for i, (label, command, icon_name) in enumerate(commands):
+            button = self.create_button_with_icon(label, command, icon_name)
+            grid.attach(button, 0, i, 1, 1)
+
+        label = Gtk.Label(label="<b>Cups/Printer Drivers</b>", use_markup=True)
+        notebook.append_page(grid, label)
+
+    def create_arch_university_tab(self, notebook):
+        grid = Gtk.Grid()
+        grid.set_column_homogeneous(True)
+        grid.set_row_homogeneous(True)
+
+        commands = [
+            ("StormOS Debian Commands", '/usr/local/bin/data/commands', "utilities-terminal"),
+            ("Visit The Debian Wiki", "xdg-open https://wiki.debian.org/", "internet-web-browser"),
+            ("Visit The Debian Website", "xdg-open https://debian.org/", "internet-web-browser"),        
+	]
+
+        for i, (label, command, icon_name) in enumerate(commands):
+            button = self.create_button_with_icon(label, command, icon_name)
+            grid.attach(button, 0, i, 1, 1)
+
+        self.add_left_buttons(grid, len(commands))
+
+        label = Gtk.Label(label="<b>StormD University</b>", use_markup=True)
+        notebook.append_page(grid, label)
+
+    def create_about_us_tab(self, notebook):
+        grid = Gtk.Grid()
+        grid.set_column_homogeneous(True)
+        grid.set_row_homogeneous(True)
+
+        commands = [
+            ("Visit us and Join us in The StormOS Channel", "xdg-open https://discord.gg/7Ze98XKJVm", "internet-web-browser"),
+            ("Distrowatch", "xdg-open https://distrowatch.com", "internet-web-browser"),
+            #("Merchandise Store", "xdg-open https://ebuzz-central.creator-spring.com/", "internet-web-browser"),
+            ("Gofund.me Page", "xdg-open https://gofund.me/d954872d", "internet-web-browser"),
+            ("Patreon Page", "xdg-open https://patreon.com/benfitzpatrick", "internet-web-browser"),
+            ("Visit The StormOS Site", "https://techcafe757.wixsite.com/storm-os", "internet-web-browser"),
+            ("Visit The StormOS Sourceforge Site for Direct Downloads and Info on StormOS", "xdg-open https://sourceforge.net/projects/hackman-linux/files/", "internet-web-browser"),
+            #("Or Visit The StormFish OS Site", "xdg-open https://sourceforge.net/projects/stormfish-os/", "internet-web-browser"),
+            ("StormOS ReadMe", '/usr/local/bin/data/about', "text-x-generic")
+        ]
+
+        for i, (label, command, icon_name) in enumerate(commands):
+            button = self.create_button_with_icon(label, command, icon_name)
+            grid.attach(button, 0, i, 1, 1)
+
+        label = Gtk.Label(label="<b>About Us/Donations/Merchandise</b>", use_markup=True)
+        notebook.append_page(grid, label)
+
+    def add_left_buttons(self, grid, start_index):
+        buttons = [
+            ("Logout", "xfce4-session-logout", "system-log-out"),
+            ("System Info by Lshw", "xfce4-terminal -H -x sudo lshw -short", "system-help"),
+            ("System Resources via Top", "xfce4-terminal -H -x top", "utilities-system-monitor"),
+            ("Update Utility Program", "xfce4-terminal -e 'utilityup'", "view-refresh"),
+            ("Add/Remove Software", "/usr/bin/gnome-software %U", "system-software-install"),
+            ("Add Utility Tool to Tray", "alltray -H sysconfig", "utilities-terminal")
+        ]
+
+        for i, (label, command, icon_name) in enumerate(buttons):
+            button = self.create_button_with_icon(label, command, icon_name)
+            grid.attach(button, 0, start_index + i, 1, 1)
+
+win = MainWindow()
+win.connect("destroy", Gtk.main_quit)
+win.show_all()
+Gtk.main()
